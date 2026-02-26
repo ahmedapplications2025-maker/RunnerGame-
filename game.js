@@ -1626,24 +1626,24 @@ window.addEventListener('beforeinstallprompt', e => {
 
   // Load images
   await AssetLoader.loadImages([
-    { key: 'player',   src: 'assets/player.png' },
-    { key: 'obstacle', src: 'assets/obstacle.png' },
-    { key: 'bg',       src: 'assets/background.png' },
-    { key: 'coin',     src: 'assets/coin.png' },
-    { key: 'powerup',  src: 'assets/powerup.png' },
+    { key: 'player',   src: 'player.png' },
+    { key: 'obstacle', src: 'obstacle.png' },
+    { key: 'bg',       src: 'background.png' },
+    { key: 'coin',     src: 'coin.png' },
+    { key: 'powerup',  src: 'powerup.png' },
   ]);
   setProgress(50, 'تحميل الأصوات...');
 
   // Load sounds
   await AudioSystem.preload([
-    { key: 'music',    src: 'sounds/music.wav',    loop: true, volume: 0.4 },
-    { key: 'jump',     src: 'sounds/jump.wav',     volume: 0.7 },
-    { key: 'slide',    src: 'sounds/slide.wav',    volume: 0.6 },
-    { key: 'coin',     src: 'sounds/coin.wav',     volume: 0.8 },
-    { key: 'crash',    src: 'sounds/crash.wav',    volume: 0.9 },
-    { key: 'powerup',  src: 'sounds/powerup.wav',  volume: 0.8 },
-    { key: 'gameover', src: 'sounds/gameover.wav', volume: 0.8 },
-    { key: 'record',   src: 'sounds/record.wav',   volume: 0.9 },
+    { key: 'music',    src: 'music.wav',    loop: true, volume: 0.4 },
+    { key: 'jump',     src: 'jump.wav',     volume: 0.7 },
+    { key: 'slide',    src: 'slide.wav',    volume: 0.6 },
+    { key: 'coin',     src: 'coin.wav',     volume: 0.8 },
+    { key: 'crash',    src: 'crash.wav',    volume: 0.9 },
+    { key: 'powerup',  src: 'powerup.wav',  volume: 0.8 },
+    { key: 'gameover', src: 'gameover.wav', volume: 0.8 },
+    { key: 'record',   src: 'record.wav',   volume: 0.9 },
   ]);
   setProgress(90, 'جاهز تقريباً...');
 
