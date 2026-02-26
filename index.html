@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1a1a2e" />
+  <meta name="description" content="Speed Runner Pro - لعبة ركض لا نهائية احترافية" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Speed Runner Pro</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dark-mode">
+
+  <!-- ════════════════ LOADING SCREEN ════════════════ -->
+  <div id="loadingScreen">
+    <div class="loading-content">
+      <h1 class="game-logo">⚡ Speed Runner Pro</h1>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar" id="loadingBar"></div>
+      </div>
+      <p id="loadingText">جارٍ التحميل... 0%</p>
+    </div>
+  </div>
+
+  <!-- ════════════════ CHARACTER SELECT ════════════════ -->
+  <div id="charSelectScreen" class="screen hidden">
+    <h2>اختر شخصيتك</h2>
+    <div class="char-grid">
+      <div class="char-card" data-char="boy" onclick="GameUI.selectChar('boy')">
+        <img src="assets/player.png" alt="ولد" />
+        <span>ولد</span>
+        <div class="char-desc">سريع • رشيق</div>
+      </div>
+      <div class="char-card locked" data-char="girl" id="girlCard">
+        <div class="lock-icon">🔒</div>
+        <img src="assets/player.png" alt="بنت" style="filter:hue-rotate(140deg)" />
+        <span>بنت</span>
+        <div class="char-desc">افتح بـ 500 عملة</div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="GameUI.startFromCharSelect()">ابدأ اللعب ▶</button>
+  </div>
+
+  <!-- ════════════════ MAIN MENU ════════════════ -->
+  <div id="mainMenu" class="screen hidden">
+    <div class="menu-bg-deco"></div>
+    <h1 class="game-logo pulse">⚡ Speed Runner Pro</h1>
+    <div class="menu-stats">
+      <span>🏆 <span id="menuBest">0</span></span>
+      <span>🪙 <span id="menuCoins">0</span></span>
+    </div>
+    <div class="menu-buttons">
+      <button class="btn-primary big" onclick="GameUI.showScreen('charSelectScreen')">🎮 العب الآن</button>
+      <button class="btn-secondary" onclick="GameUI.showScreen('shopScreen')">🛍️ المتجر</button>
+      <button class="btn-secondary" onclick="GameUI.showScreen('achievementsScreen')">🏅 الإنجازات</button>
+      <button class="btn-secondary" onclick="GameUI.showScreen('leaderboardScreen')">🌍 لوحة الصدارة</button>
+    </div>
+    <div class="menu-bottom">
+      <button class="btn-icon" onclick="GameUI.toggleTheme()" title="تبديل الثيم">🌙</button>
+      <button class="btn-icon" onclick="GameUI.toggleMute()" id="muteBtn" title="كتم الصوت">🔊</button>
+      <button class="btn-icon" id="installBtn" onclick="GameUI.installApp()" title="تثبيت" style="display:none">📲</button>
+    </div>
+  </div>
+
+  <!-- ════════════════ GAME CANVAS ════════════════ -->
+  <div id="gameContainer" class="hidden">
+    <div id="hud">
+      <div id="hudLeft">
+        <span id="scoreDisplay">0</span>
+        <span id="fpsDisplay" class="fps-counter">FPS: 0</span>
+      </div>
+      <div id="hudCenter">
+        <span id="powerupIndicator" class="hidden"></span>
+      </div>
+      <div id="hudRight">
+        <span id="coinDisplay">🪙 0</span>
+        <button id="pauseBtn" onclick="GameEngine.togglePause()">⏸</button>
+      </div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <!-- تلميح لمسي خفيف يختفي بعد أول لمسة -->
+    <div id="touchHint">
+      <span>👆 اضغط للقفز</span>
+    </div>
+  </div>
+
+  <!-- ════════════════ PAUSE SCREEN ════════════════ -->
+  <div id="pauseScreen" class="screen hidden overlay">
+    <div class="modal">
+      <h2>⏸ إيقاف مؤقت</h2>
+      <p>النقاط: <strong id="pauseScore">0</strong></p>
+      <button class="btn-primary" onclick="GameEngine.togglePause()">▶ استمر</button>
+      <button class="btn-secondary" onclick="GameUI.quitToMenu()">🏠 القائمة الرئيسية</button>
+    </div>
+  </div>
+
+  <!-- ════════════════ GAME OVER ════════════════ -->
+  <div id="gameOverScreen" class="screen hidden overlay">
+    <div class="modal gameover-modal">
+      <h2 id="gameOverTitle">💀 انتهت اللعبة</h2>
+      <div class="results-grid">
+        <div class="result-item"><span>النقاط</span><strong id="finalScore">0</strong></div>
+        <div class="result-item"><span>أفضل نتيجة</span><strong id="finalBest">0</strong></div>
+        <div class="result-item"><span>عملات</span><strong id="finalCoins">0</strong></div>
+        <div class="result-item"><span>قفزات</span><strong id="finalJumps">0</strong></div>
+      </div>
+      <div id="newRecordBanner" class="hidden">🎉 رقم قياسي جديد!</div>
+      <div class="gameover-buttons">
+        <button class="btn-primary big" onclick="GameEngine.restart()">🔄 إعادة</button>
+        <button class="btn-secondary" onclick="GameUI.quitToMenu()">🏠 القائمة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════ SHOP ════════════════ -->
+  <div id="shopScreen" class="screen hidden">
+    <button class="btn-back" onclick="GameUI.showScreen('mainMenu')">← رجوع</button>
+    <h2>🛍️ المتجر</h2>
+    <div class="coins-balance">عملاتك: <strong id="shopCoins">0</strong> 🪙</div>
+    <div class="shop-grid" id="shopGrid"></div>
+  </div>
+
+  <!-- ════════════════ ACHIEVEMENTS ════════════════ -->
+  <div id="achievementsScreen" class="screen hidden">
+    <button class="btn-back" onclick="GameUI.showScreen('mainMenu')">← رجوع</button>
+    <h2>🏅 الإنجازات</h2>
+    <div class="achievements-list" id="achievementsList"></div>
+  </div>
+
+  <!-- ════════════════ LEADERBOARD ════════════════ -->
+  <div id="leaderboardScreen" class="screen hidden">
+    <button class="btn-back" onclick="GameUI.showScreen('mainMenu')">← رجوع</button>
+    <h2>🌍 لوحة الصدارة</h2>
+    <div class="leaderboard-list" id="leaderboardList"></div>
+    <button class="btn-danger" onclick="GameUI.clearLeaderboard()">🗑️ مسح</button>
+  </div>
+
+  <!-- ════════════════ NOTIFICATION ════════════════ -->
+  <div id="notification" class="notification hidden"></div>
+
+  <script src="game.js"></script>
+</body>
+</html>
